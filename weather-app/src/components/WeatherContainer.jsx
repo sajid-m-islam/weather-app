@@ -1,8 +1,10 @@
 import { useState } from "react";
 import WeatherCard from "./WeatherCard";
+import ForecastCard from "./ForecastCard";
 
 export default function WeatherContainer() {
-    const [weatherData, setWeatherData] = useState(null);
+    const [currentWeatherData, setCurrentWeatherData] = useState(null);
+    const [forecastData, setForecastData] = useState(null);
 
     const getWeatherData = async () => {
         try {
@@ -25,18 +27,30 @@ export default function WeatherContainer() {
             const latitude = location.lat;
             const longitude = location.lon;
 
-            const weatherUrl = new URL(
+            const currentWeatherUrl = new URL(
                 "https://api.openweathermap.org/data/2.5/weather",
             );
-            weatherUrl.searchParams.append("lat", latitude);
-            weatherUrl.searchParams.append("lon", longitude);
-            weatherUrl.searchParams.append("appid", apiKey);
-            weatherUrl.searchParams.append("units", "imperial");
+            currentWeatherUrl.searchParams.append("lat", latitude);
+            currentWeatherUrl.searchParams.append("lon", longitude);
+            currentWeatherUrl.searchParams.append("appid", apiKey);
+            currentWeatherUrl.searchParams.append("units", "imperial");
 
-            const weatherResponse = await fetch(weatherUrl);
-            const weatherAPIData = await weatherResponse.json();
-            console.log(weatherAPIData);
-            setWeatherData(weatherAPIData);
+            const currentWeatherResponse = await fetch(currentWeatherUrl);
+            const currentWeatherAPIData = await currentWeatherResponse.json();
+            setCurrentWeatherData(currentWeatherAPIData);
+
+            const forecastUrl = new URL(
+                "https://api.openweathermap.org/data/2.5/forecast",
+            );
+            forecastUrl.searchParams.append("lat", latitude);
+            forecastUrl.searchParams.append("lon", longitude);
+            forecastUrl.searchParams.append("appid", apiKey);
+            forecastUrl.searchParams.append("units", "imperial");
+
+            const forecastResponse = await fetch(forecastUrl);
+            const forecastData = await forecastResponse.json();
+            console.log(forecastData);
+            setForecastData(forecastData);
         } catch (error) {
             console.error("Error occured: ", error);
         }
@@ -48,7 +62,7 @@ export default function WeatherContainer() {
 
                 <button onClick={getWeatherData}>Test Fetch Weather</button>
 
-                {weatherData && (
+                {currentWeatherData && (
                     <div
                         style={{
                             marginTop: "20px",
@@ -57,7 +71,10 @@ export default function WeatherContainer() {
                         }}
                     >
                         <p>✅ Data loaded successfully!</p>
-                        <WeatherCard weatherData={weatherData} />
+                        <p>Current weather</p>
+                        <WeatherCard weatherData={currentWeatherData} />
+                        <p>5-day forecast</p>
+                        <ForecastCard forecastData={forecastData} />
                     </div>
                 )}
             </div>
