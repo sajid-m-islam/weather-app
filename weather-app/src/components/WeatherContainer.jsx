@@ -5,9 +5,26 @@ import ForecastCard from "./ForecastCard";
 export default function WeatherContainer() {
     const [currentWeatherData, setCurrentWeatherData] = useState(null);
     const [forecastData, setForecastData] = useState(null);
-    const [city, setCity] = useState(null);
-    const [state, setState] = useState(null);
-    const [country, setCountry] = useState(null);
+
+    const [city, setCity] = useState("");
+    const [state, setState] = useState("");
+    const [country, setCountry] = useState("");
+
+    const [newsData, setNewsData] = useState("");
+
+    const getNewsData = async () => {
+        try {
+            const apiKey = import.meta.env.VITE_NYT_API_KEY;
+            const url = `https://api.nytimes.com/svc/topstories/v2/home.json?api-key=${apiKey}`;
+
+            const response = await fetch(url);
+            const data = await response.json();
+            console.log(data);
+            setNewsData(data.results);
+        } catch (error) {
+            console.error("Error occured: ", error);
+        }
+    };
 
     const getWeatherData = async () => {
         try {
@@ -51,10 +68,15 @@ export default function WeatherContainer() {
             const forecastData = await forecastResponse.json();
             console.log(forecastData);
             setForecastData(forecastData);
+
+            if (!newsData) {
+                getNewsData();
+            }
         } catch (error) {
             console.error("Error occured: ", error);
         }
     };
+
     return (
         <>
             <div>
@@ -96,6 +118,30 @@ export default function WeatherContainer() {
                         <WeatherCard weatherData={currentWeatherData} />
                         <p>5-day forecast</p>
                         <ForecastCard forecastData={forecastData} />
+                    </div>
+                )}
+                {newsData && (
+                    <div
+                        style={{
+                            marginTop: "20px",
+                            padding: "10px",
+                            border: "1px solid blue",
+                        }}
+                    >
+                        <p>Top News Today</p>
+                        <ul>
+                            {newsData.slice(0, 5).map((article, index) => (
+                                <li key={index}>
+                                    <a
+                                        href={article.url}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                    >
+                                        {article.title}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
                 )}
             </div>
