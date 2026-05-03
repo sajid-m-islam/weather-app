@@ -1,3 +1,5 @@
+import { Box, Card, CardContent, Typography, Grid } from "@mui/material";
+
 export default function ForecastCard({ forecastData }) {
     if (!forecastData) return <p>Loading forecast...</p>;
 
@@ -14,17 +16,33 @@ export default function ForecastCard({ forecastData }) {
         const dayName = date.toLocaleDateString("en-US", { weekday: "short" });
 
         return (
-            <div key={index} className="daily-card">
-                <h3 className="daily-day">{dayName}</h3>
-                <img
-                    className="daily-icon"
-                    src={`https://openweathermap.org/img/wn/${icon}.png`}
-                    alt="weather icon"
-                />
-                <p className="daily-temp">{Math.round(temp)}°</p>
-            </div>
+            <Grid item xs={12} sm={6} md={4} lg={2.4} key={index}>
+                <Card sx={{ textAlign: "center", height: "100%" }}>
+                    <CardContent>
+                        <Typography variant="h6" component="h3" gutterBottom>
+                            {dayName}
+                        </Typography>
+                        <Box sx={{ mb: 1 }}>
+                            <img
+                                src={`https://openweathermap.org/img/wn/${icon}.png`}
+                                alt="weather icon"
+                                style={{ width: 60, height: 60 }}
+                            />
+                        </Box>
+                        <Typography variant="h5" component="p">
+                            {Math.round(temp)}°
+                        </Typography>
+                    </CardContent>
+                </Card>
+            </Grid>
         );
     });
 
-    return <div className="forecast-container">{forecastCards}</div>;
+    return (
+        <Box sx={{ mt: 2 }}>
+            <Grid container spacing={2}>
+                {forecastCards}
+            </Grid>
+        </Box>
+    );
 }

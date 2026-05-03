@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Card, CardContent, Typography, Box, Grid } from "@mui/material";
 
 export default function WeatherCard({ weatherData }) {
     const { name, main, weather, wind, sys } = weatherData;
@@ -7,49 +7,86 @@ export default function WeatherCard({ weatherData }) {
     const { speed } = wind;
     const { country } = sys;
 
-    const { main: conditions, description, icon } = weather[0];
+    const { description, icon } = weather[0];
 
     const iconUrl = `https://openweathermap.org/img/wn/${icon}@2x.png`;
 
     return (
-        <>
-            <div className="weather-card">
-                <h2 className="weather-location">
+        <Card sx={{ maxWidth: 400, mx: "auto", textAlign: "center" }}>
+            <CardContent>
+                <Typography variant="h4" component="h2" gutterBottom>
                     {name}, {country}
-                </h2>
+                </Typography>
 
-                <p className="weather-description">{description}</p>
-                <img
-                    src={`https://openweathermap.org/img/wn/${icon}@2x.png`}
-                    alt={description}
-                    className="weather-icon"
-                />
+                <Typography
+                    variant="body1"
+                    color="text.secondary"
+                    sx={{ mb: 2 }}
+                >
+                    {description}
+                </Typography>
 
-                <div className="weather-temp">{Math.round(temp)}°</div>
+                <Box sx={{ mb: 2 }}>
+                    <img
+                        src={iconUrl}
+                        alt={description}
+                        style={{ width: 100, height: 100 }}
+                    />
+                </Box>
 
-                <p className="weather-feels-like">
+                <Typography variant="h3" component="div" sx={{ mb: 1 }}>
+                    {Math.round(temp)}°
+                </Typography>
+
+                <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{ mb: 3 }}
+                >
                     Feels like {Math.round(feels_like)}°
-                </p>
+                </Typography>
 
-                <div className="weather-details">
-                    <div className="details-left">
-                        <p>
-                            <strong>H:</strong> {Math.round(temp_max)}°
-                        </p>
-                        <p>
-                            <strong>L:</strong> {Math.round(temp_min)}°
-                        </p>
-                    </div>
-                    <div className="details-right">
-                        <p>
-                            <strong>Humidity:</strong> {humidity}%
-                        </p>
-                        <p>
-                            <strong>Wind:</strong> {Math.round(speed)} mph
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </>
+                <Grid container spacing={2}>
+                    <Grid item xs={6}>
+                        <Box>
+                            <Typography variant="body2" color="text.secondary">
+                                High
+                            </Typography>
+                            <Typography variant="h6">
+                                {Math.round(temp_max)}°
+                            </Typography>
+                        </Box>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Box>
+                            <Typography variant="body2" color="text.secondary">
+                                Low
+                            </Typography>
+                            <Typography variant="h6">
+                                {Math.round(temp_min)}°
+                            </Typography>
+                        </Box>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Box>
+                            <Typography variant="body2" color="text.secondary">
+                                Humidity
+                            </Typography>
+                            <Typography variant="h6">{humidity}%</Typography>
+                        </Box>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Box>
+                            <Typography variant="body2" color="text.secondary">
+                                Wind
+                            </Typography>
+                            <Typography variant="h6">
+                                {Math.round(speed)} mph
+                            </Typography>
+                        </Box>
+                    </Grid>
+                </Grid>
+            </CardContent>
+        </Card>
     );
 }

@@ -1,4 +1,18 @@
 import { useState } from "react";
+import {
+    Container,
+    Typography,
+    TextField,
+    Button,
+    Card,
+    CardContent,
+    Box,
+    Grid,
+    List,
+    ListItem,
+    ListItemText,
+    Link,
+} from "@mui/material";
 import WeatherCard from "./WeatherCard";
 import ForecastCard from "./ForecastCard";
 
@@ -78,73 +92,103 @@ export default function WeatherContainer() {
     };
 
     return (
-        <>
-            <div>
-                <h1>Weather Search</h1>
-                <div>
-                    <h3>Enter a city: </h3>
-                    <input
-                        type="text"
-                        onChange={(e) => setCity(e.target.value)}
-                        placeholder="City"
-                    ></input>
+        <Container maxWidth="md" sx={{ py: 4 }}>
+            <Typography variant="h3" component="h1" gutterBottom align="center">
+                Weather App
+            </Typography>
 
-                    <h3>Enter a state: </h3>
-                    <input
-                        type="text"
-                        onChange={(e) => setState(e.target.value)}
-                        placeholder="State (abbreviation)"
-                    ></input>
-
-                    <h3>Enter a country: </h3>
-                    <input
-                        type="text"
-                        onChange={(e) => setCountry(e.target.value)}
-                        placeholder="Country (abbreviation)"
-                    ></input>
-                </div>
-
-                <button onClick={getWeatherData}>Get Weather Data</button>
-
-                {currentWeatherData && (
-                    <div
-                        style={{
-                            marginTop: "20px",
-                            padding: "10px",
-                            border: "1px solid green",
-                        }}
+            <Card sx={{ mb: 4, p: 3 }}>
+                <Typography variant="h5" component="h2" gutterBottom>
+                    Enter Location
+                </Typography>
+                <Grid container spacing={2}>
+                    <Grid item xs={12} sm={4}>
+                        <TextField
+                            fullWidth
+                            label="City"
+                            value={city}
+                            onChange={(e) => setCity(e.target.value)}
+                            placeholder="e.g., New York"
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                        <TextField
+                            fullWidth
+                            label="State"
+                            value={state}
+                            onChange={(e) => setState(e.target.value)}
+                            placeholder="e.g., NY"
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                        <TextField
+                            fullWidth
+                            label="Country"
+                            value={country}
+                            onChange={(e) => setCountry(e.target.value)}
+                            placeholder="e.g., US"
+                        />
+                    </Grid>
+                </Grid>
+                <Box sx={{ mt: 2 }}>
+                    <Button
+                        variant="contained"
+                        size="large"
+                        onClick={getWeatherData}
+                        fullWidth
                     >
-                        <p>Current weather</p>
+                        Get Weather Data
+                    </Button>
+                </Box>
+            </Card>
+
+            {currentWeatherData && (
+                <Card sx={{ mb: 4 }}>
+                    <CardContent>
+                        <Typography variant="h5" component="h3" gutterBottom>
+                            Current Weather
+                        </Typography>
                         <WeatherCard weatherData={currentWeatherData} />
-                        <p>5-day forecast</p>
+                        <Typography
+                            variant="h5"
+                            component="h3"
+                            gutterBottom
+                            sx={{ mt: 3 }}
+                        >
+                            5-Day Forecast
+                        </Typography>
                         <ForecastCard forecastData={forecastData} />
-                    </div>
-                )}
-                {newsData && (
-                    <div
-                        style={{
-                            marginTop: "20px",
-                            padding: "10px",
-                            border: "1px solid blue",
-                        }}
-                    >
-                        <p>Top News Today</p>
-                        <ul>
+                    </CardContent>
+                </Card>
+            )}
+
+            {newsData && (
+                <Card>
+                    <CardContent>
+                        <Typography variant="h5" component="h3" gutterBottom>
+                            Top News Today
+                        </Typography>
+                        <List>
                             {newsData.slice(0, 5).map((article, index) => (
-                                <li key={index}>
-                                    <a
-                                        href={article.url}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                    >
-                                        {article.title}
-                                    </a>
-                                </li>
+                                <ListItem key={index} disablePadding>
+                                    <ListItemText
+                                        primary={
+                                            <Link
+                                                href={article.url}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                underline="hover"
+                                            >
+                                                {article.title}
+                                            </Link>
+                                        }
+                                    />
+                                </ListItem>
                             ))}
-                        </ul>
-                    </div>
-                )}
-            </div>
-        </>
+                        </List>
+                    </CardContent>
+                </Card>
+            )}
+        </Container>
     );
 }
