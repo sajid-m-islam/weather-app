@@ -3,7 +3,6 @@ export default function ForecastCard({ forecastData }) {
 
     const { list } = forecastData;
 
-    // Filter for 18:00:00 UTC (which is 2:00 PM EDT / 1:00 PM EST)
     const dailyData = list.filter((block) => block.dt_txt.includes("18:00:00"));
 
     const forecastCards = dailyData.map((day, index) => {
@@ -17,6 +16,11 @@ export default function ForecastCard({ forecastData }) {
         return (
             <div key={index} className="daily-card">
                 <h3 className="daily-day">{dayName}</h3>
+                <img
+                    className="daily-icon"
+                    src={`https://openweathermap.org/img/wn/${icon}.png`}
+                    alt="weather icon"
+                />
                 <p className="daily-temp">{Math.round(temp)}°</p>
             </div>
         );

@@ -5,13 +5,13 @@ import ForecastCard from "./ForecastCard";
 export default function WeatherContainer() {
     const [currentWeatherData, setCurrentWeatherData] = useState(null);
     const [forecastData, setForecastData] = useState(null);
+    const [city, setCity] = useState(null);
+    const [state, setState] = useState(null);
+    const [country, setCountry] = useState(null);
 
     const getWeatherData = async () => {
         try {
             const apiKey = import.meta.env.VITE_WEATHER_API_KEY;
-            const city = "Charlottesville";
-            const state = "VA";
-            const country = "US";
             const geoUrl = new URL(
                 "https://api.openweathermap.org/geo/1.0/direct",
             );
@@ -59,8 +59,30 @@ export default function WeatherContainer() {
         <>
             <div>
                 <h1>Weather Search</h1>
+                <div>
+                    <h3>Enter a city: </h3>
+                    <input
+                        type="text"
+                        onChange={(e) => setCity(e.target.value)}
+                        placeholder="City"
+                    ></input>
 
-                <button onClick={getWeatherData}>Test Fetch Weather</button>
+                    <h3>Enter a state: </h3>
+                    <input
+                        type="text"
+                        onChange={(e) => setState(e.target.value)}
+                        placeholder="State (abbreviation)"
+                    ></input>
+
+                    <h3>Enter a country: </h3>
+                    <input
+                        type="text"
+                        onChange={(e) => setCountry(e.target.value)}
+                        placeholder="Country (abbreviation)"
+                    ></input>
+                </div>
+
+                <button onClick={getWeatherData}>Get Weather Data</button>
 
                 {currentWeatherData && (
                     <div
@@ -70,7 +92,6 @@ export default function WeatherContainer() {
                             border: "1px solid green",
                         }}
                     >
-                        <p>✅ Data loaded successfully!</p>
                         <p>Current weather</p>
                         <WeatherCard weatherData={currentWeatherData} />
                         <p>5-day forecast</p>

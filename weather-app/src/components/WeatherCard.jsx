@@ -9,6 +9,8 @@ export default function WeatherCard({ weatherData }) {
 
     const { main: conditions, description, icon } = weather[0];
 
+    const iconUrl = `https://openweathermap.org/img/wn/${icon}@2x.png`;
+
     return (
         <>
             <div className="weather-card">
@@ -17,6 +19,11 @@ export default function WeatherCard({ weatherData }) {
                 </h2>
 
                 <p className="weather-description">{description}</p>
+                <img
+                    src={`https://openweathermap.org/img/wn/${icon}@2x.png`}
+                    alt={description}
+                    className="weather-icon"
+                />
 
                 <div className="weather-temp">{Math.round(temp)}°</div>
 
